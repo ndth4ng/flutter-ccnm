@@ -4,7 +4,7 @@ import 'package:flutter_thang/screens/home/home.dart';
 import 'package:flutter_thang/shared/constants.dart';
 
 class SignIn extends StatefulWidget {
-  // final Function toggleView;
+  static const routeName = '/sign-in';
   const SignIn({Key? key}) : super(key: key);
 
   @override
@@ -93,8 +93,7 @@ class _SignInState extends State<SignIn> {
                 const Text("Do not have an account?"),
                 TextButton(
                   onPressed: () {
-                    // widget.toggleView();
-                    Navigator.pushNamed(context, '/sign-up');
+                    Navigator.pushNamed(context, SignUp.routeName);
                   },
                   child: const Text(
                     "Sign up now",

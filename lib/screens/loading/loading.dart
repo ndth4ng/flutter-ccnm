@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_thang/screens/authenticate/sign_in.dart';
 
 class Loading extends StatefulWidget {
+  static const routeName = '/loading';
   const Loading({Key? key}) : super(key: key);
 
   @override
@@ -22,10 +24,29 @@ class _LoadingState extends State<Loading> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
+      backgroundColor: Colors.green[50],
       body: Center(
-        child: Text("Loading"),
-      ),
+          child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: const [
+          SpinKitFadingCube(
+            color: Colors.green,
+            size: 100.0,
+          ),
+          SizedBox(
+            height: 50.0,
+          ),
+          Text(
+            'Welcome!',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF0B5EA7),
+            ),
+          ),
+        ],
+      )),
     );
   }
 }

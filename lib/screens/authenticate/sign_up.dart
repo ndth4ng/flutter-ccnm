@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_thang/shared/constants.dart';
 
 class SignUp extends StatefulWidget {
-  // final Function toggleView;
+  static const routeName = '/sign-up';
   const SignUp({Key? key}) : super(key: key);
 
   @override
@@ -152,20 +152,7 @@ class _SignUpState extends State<SignUp> {
                     const SizedBox(height: 20.0),
                     ElevatedButton(
                       onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          // setState(() => loading = true);
-                          // dynamic result =
-                          //     await _auth.signInWithEmailAndPassword(email, password);
-                          // if (result is String) {
-                          //   setState(() {
-                          //     error = result;
-                          //     loading = false;
-                          //   });
-                          // } else {
-                          //   print(email + '-' + password);
-                          // }
-                          print('sign in');
-                        }
+                        if (_formKey.currentState!.validate()) {}
                       },
                       child: const Text(
                         'Sign in',

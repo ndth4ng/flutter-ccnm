@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_thang/models/student.dart';
 import 'package:flutter_thang/services/student.dart';
 import 'package:flutter_thang/shared/constants.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-class AddStudent extends StatefulWidget {
-  static const routeName = '/add';
-  const AddStudent({Key? key}) : super(key: key);
+class EditStudent extends StatefulWidget {
+  static const routeName = '/edit';
+  const EditStudent({Key? key}) : super(key: key);
 
   @override
-  State<AddStudent> createState() => _AddStudentState();
+  State<EditStudent> createState() => _EditStudentState();
 }
 
-class _AddStudentState extends State<AddStudent> {
+class _EditStudentState extends State<EditStudent> {
   final _formKey = GlobalKey<FormState>();
+  late Student student;
 
   TextEditingController fullName = TextEditingController();
   String? gender;
@@ -24,8 +26,9 @@ class _AddStudentState extends State<AddStudent> {
   TextEditingController address = TextEditingController();
   TextEditingController department = TextEditingController();
 
-  // Date picker
+  List<String> genderEnum = ['Male', 'Female'];
 
+  // Date picker
   DateTime selectedDate = DateTime.now();
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -34,49 +37,51 @@ class _AddStudentState extends State<AddStudent> {
         firstDate: DateTime(1900, 1),
         lastDate: DateTime.now());
     if (picked != null && picked != selectedDate) {
-      setState(() {
-        dateOfBirth.text = DateFormat('dd-MM-yyyy').format(picked);
-      });
+      dateOfBirth.text = DateFormat('dd-MM-yyyy').format(picked);
     }
-  }
-
-  cleanText() {
-    fullName.clear();
-    dateOfBirth.clear();
-    phone.clear();
-    email.clear();
-    address.clear();
-    department.clear();
-
-    setState(() {
-      gender = null;
-    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final studentService = Provider.of<StudentService>(context, listen: false);
+    final studentService = Provider.of<StudentService>(context);
+    student = ModalRoute.of(context)?.settings.arguments as Student;
 
-    void onAddStudent() async {
-      await studentService.addStudent(fullName.text, gender, dateOfBirth.text,
-          phone.text, address.text, email.text, department.text);
+    fullName.text = student.fullName ?? '';
+    gender =
+        genderEnum.contains(student.gender.toString()) ? student.gender : null;
+    dateOfBirth.text = student.dateOfBirth ?? '';
+    phone.text = student.phone ?? '';
+    address.text = student.address ?? '';
+    email.text = student.email ?? '';
+    department.text = student.department ?? '';
 
-      cleanText();
+    void onEditStudent() async {
+      await studentService.updateStudent(
+          student.id,
+          fullName.text,
+          gender,
+          dateOfBirth.text,
+          phone.text,
+          address.text,
+          email.text,
+          department.text);
 
       Fluttertoast.showToast(
-        msg: "Add student successfully.", // message
+        msg: "Update student successfully.", // message
         toastLength: Toast.LENGTH_SHORT, // length
         gravity: ToastGravity.BOTTOM, // location
         timeInSecForIosWeb: 3, // duration
         backgroundColor: Colors.green,
         textColor: Colors.white,
       );
+
+      Navigator.of(context).pop();
     }
 
     return Scaffold(
       backgroundColor: Colors.green[50],
       appBar: AppBar(
-        title: const Text("Add Student"),
+        title: const Text("Update Student"),
         centerTitle: true,
         elevation: 0.0,
       ),
@@ -108,9 +113,7 @@ class _AddStudentState extends State<AddStudent> {
                   children: <Widget>[
                     Expanded(
                       child: DropdownButtonFormField<String>(
-                        onChanged: (value) => setState(() {
-                          gender = value;
-                        }),
+                        onChanged: (value) => gender = value,
                         value: gender,
                         validator: (String? val) {
                           if (val == null || val.isEmpty) {
@@ -213,11 +216,11 @@ class _AddStudentState extends State<AddStudent> {
                 ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      onAddStudent();
+                      onEditStudent();
                     }
                   },
                   child: const Text(
-                    'Create',
+                    'Save',
                     style: TextStyle(
                       fontSize: 18.0,
                       fontWeight: FontWeight.w500,

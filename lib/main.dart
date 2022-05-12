@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_thang/models/student.dart';
+import 'package:flutter_thang/screens/add_student.dart';
 import 'package:flutter_thang/screens/authenticate/sign_in.dart';
 import 'package:flutter_thang/screens/authenticate/sign_up.dart';
-import 'package:flutter_thang/screens/home/home.dart';
+import 'package:flutter_thang/screens/edit_student.dart';
 import 'package:flutter_thang/screens/loading/loading.dart';
 import 'package:flutter_thang/services/student.dart';
 
@@ -13,10 +13,6 @@ void main() {
     providers: [
       ChangeNotifierProvider<StudentService>(
         create: (_) => StudentService(),
-      ),
-      FutureProvider<List<Student>?>(
-        create: (_) => StudentService().getStudents(),
-        initialData: null,
       ),
     ],
     child: const MyApp(),
@@ -34,12 +30,13 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.green,
         ),
-        initialRoute: '/',
+        initialRoute: Loading.routeName,
         routes: {
-          '/': (context) => const Loading(),
-          '/home': (context) => const Home(),
-          '/sign-up': (context) => const SignUp(),
-          '/sign-in': (context) => const SignIn(),
+          Loading.routeName: (context) => const Loading(),
+          SignUp.routeName: (context) => const SignUp(),
+          SignIn.routeName: (context) => const SignIn(),
+          AddStudent.routeName: (context) => const AddStudent(),
+          EditStudent.routeName: (context) => const EditStudent(),
         });
   }
 }
